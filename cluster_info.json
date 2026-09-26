@@ -1,0 +1,37 @@
+{
+  "0": {
+    "nama": "Gempa Kuat",
+    "deskripsi": "Gempa dengan magnitudo tinggi (rata-rata 5,65) yang dapat terjadi di seluruh wilayah Indonesia. Kelompok ini paling berpotensi merusak.",
+    "jumlah_gempa": 708,
+    "depth_rata2": 46.06,
+    "mag_rata2": 5.65
+  },
+  "1": {
+    "nama": "Busur Selatan Nusa Tenggara - Laut Banda - Papua",
+    "deskripsi": "Gempa dangkal hingga menengah (rata-rata 66 km) di busur selatan kawasan timur Indonesia.",
+    "jumlah_gempa": 2855,
+    "depth_rata2": 66.24,
+    "mag_rata2": 4.7
+  },
+  "2": {
+    "nama": "Kawasan Utara Laut Maluku - Halmahera - Sulawesi Utara",
+    "deskripsi": "Kelompok gempa terbanyak, berada di utara khatulistiwa dengan kedalaman rata-rata 62 km.",
+    "jumlah_gempa": 3146,
+    "depth_rata2": 62.49,
+    "mag_rata2": 4.7
+  },
+  "3": {
+    "nama": "Zona Subduksi Sumatra - Jawa Bagian Barat",
+    "deskripsi": "Gempa dangkal (rata-rata 43 km) di jalur subduksi sebelah barat Sumatra hingga selatan Jawa bagian barat.",
+    "jumlah_gempa": 1695,
+    "depth_rata2": 42.69,
+    "mag_rata2": 4.77
+  },
+  "4": {
+    "nama": "Gempa Dalam Laut Jawa - Flores - Banda",
+    "deskripsi": "Gempa sangat dalam (rata-rata 474 km) akibat lempeng yang menunjam jauh ke dalam bumi.",
+    "jumlah_gempa": 327,
+    "depth_rata2": 473.89,
+    "mag_rata2": 4.82
+  }
+}
