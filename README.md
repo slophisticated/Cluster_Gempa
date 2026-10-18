@@ -20,7 +20,7 @@ label kelompok, bukan urutan tingkat bahaya.
 
 ## Menjalankan aplikasi
 
-Siapkan Python dan pip, lalu jalankan dari direktori repository:
+Gunakan **Python 3.12** dan pip, lalu jalankan dari direktori repository:
 
 ```sh
 git clone https://github.com/slophisticated/Cluster_Gempa.git
@@ -52,13 +52,30 @@ root repository: aplikasi membaca model, metadata, dan CSV melalui path relatif.
 Artefak model sudah tersedia, sehingga menjalankan aplikasi tidak memerlukan
 pelatihan ulang.
 
-Versi dependensi belum dikunci di `requirements.txt`, dan versi lingkungan
-pelatihan belum tercatat di notebook. Kompatibilitas model `.joblib` dengan
-semua versi scikit-learn belum dijamin. Jika muncul peringatan versi model,
-gunakan lingkungan pelatihan yang sesuai atau latih dan ekspor ulang seluruh
-artefak dengan versi yang sama; lihat
+Dependensi aplikasi dikunci di `requirements.txt`. Kedua artefak `.joblib`
+menyimpan versi **scikit-learn 1.6.1**; versi ini dipakai agar tidak memuat model
+dengan versi scikit-learn berbeda. Kombinasi dependensi yang dicantumkan telah
+diuji pada Windows dengan Python 3.12.14: halaman aplikasi dan prediksi manual
+berjalan, dua input sintetis menghasilkan label `[3, 3]`, dan seluruh **8.731**
+label historis cocok dengan hasil model. macOS, Linux, dan deployment cloud
+belum diuji untuk kombinasi ini.
+
+Ini adalah lingkungan aplikasi yang diuji, bukan rekonstruksi lengkap
+lingkungan pelatihan: versi NumPy/SciPy saat pelatihan belum tercatat.
+Dependensi transitif juga belum dikunci seluruhnya. Jika melatih ulang,
+simpan versi lingkungan bersama seluruh artefak baru; lihat
 [panduan persistensi model scikit-learn](https://scikit-learn.org/stable/model_persistence.html).
 Muat hanya file Joblib dari sumber yang dipercaya.
+
+Untuk memeriksa artefak dan data historis setelah instalasi:
+
+```sh
+python scripts/check_models.py
+```
+
+Pemeriksaan menolak versi scikit-learn yang berbeda, membandingkan label
+historis dan jumlah tiap cluster dengan metadata, serta menjalankan contoh
+sintetis. Ini memeriksa konsistensi file, bukan akurasi ilmiah model.
 
 ## Contoh CSV
 
@@ -107,7 +124,8 @@ tersimpan terpisah dari model.
 | --- | --- |
 | [app.py](app.py) | Antarmuka Streamlit dan penempatan input ke cluster |
 | [Notebook analisis](Clustering_Gempa_Indonesia_USGS.ipynb) | Persiapan data, perbandingan model, evaluasi, dan ekspor artefak |
-| [requirements.txt](requirements.txt) | Dependensi aplikasi, belum dikunci versinya |
+| [requirements.txt](requirements.txt) | Versi dependensi aplikasi yang sudah diuji |
+| [scripts/check_models.py](scripts/check_models.py) | Pemeriksaan konsistensi artefak dan label historis |
 | [gempa_indonesia_usgs.csv](gempa_indonesia_usgs.csv) | Salinan katalog yang digunakan notebook |
 | [data_cluster.csv](data_cluster.csv) | Empat fitur dan label historis untuk peta |
 | [cluster_info.json](cluster_info.json) | Nama, deskripsi, dan statistik lima cluster |
