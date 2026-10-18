@@ -1,5 +1,8 @@
-streamlit
-pandas
-joblib
-numpy
-scikit-learn
+# Lingkungan aplikasi yang diuji dengan Python 3.12.14 (Windows).
+# Kedua artefak Joblib menyimpan versi scikit-learn 1.6.1.
+streamlit==1.66.0
+pandas==3.0.6
+joblib==1.6.0
+numpy==2.5.4
+scikit-learn==1.6.1
+scipy==1.18.1
