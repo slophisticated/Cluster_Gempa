@@ -97,14 +97,15 @@ latitude,longitude,depth,mag
 | `mag` | Magnitudo, bukan intensitas guncangan di suatu lokasi |
 
 Gunakan header persis seperti contoh dan titik sebagai pemisah desimal.
-Keempat fitur harus numerik. Aplikasi membuang baris dengan fitur kosong,
-tetapi belum menyediakan penanganan khusus untuk CSV rusak, teks pada fitur
-numerik, atau file tanpa baris valid.
+Keempat fitur harus berupa angka berhingga. Aplikasi melewati baris dengan fitur
+kosong dan menampilkan jumlahnya; jika tidak ada baris lengkap, prediksi tidak
+dijalankan. CSV kosong, format rusak, encoding selain UTF-8, teks pada fitur
+numerik, serta nilai tak hingga ditolak dengan pesan untuk memperbaiki file.
 
 Input manual dibatasi pada lintang -11 hingga 6, bujur 95 hingga 141,
-kedalaman 0 hingga 700 km, dan magnitudo 4.5 hingga 9.5. Batas ini belum
-diterapkan pada unggahan CSV; siapkan data dengan cakupan yang sesuai sebelum
-mengunggah. Hasil unduhan berisi kolom input, `Cluster`, dan `Nama Cluster`.
+kedalaman 0 hingga 700 km, dan magnitudo 4.5 hingga 9.5. Unggahan CSV memakai
+batas yang sama: file dengan nilai di luar batas ditolak, bukan
+dipotong ke nilai batas. Hasil unduhan berisi kolom input, `Cluster`, dan `Nama Cluster`.
 
 ## Data dan metode
 
@@ -123,6 +124,7 @@ tersimpan terpisah dari model.
 | File | Kegunaan |
 | --- | --- |
 | [app.py](app.py) | Antarmuka Streamlit dan penempatan input ke cluster |
+| [csv_input.py](csv_input.py) | Validasi fitur CSV dan batas input yang dipakai aplikasi |
 | [Notebook analisis](Clustering_Gempa_Indonesia_USGS.ipynb) | Persiapan data, perbandingan model, evaluasi, dan ekspor artefak |
 | [requirements.txt](requirements.txt) | Versi dependensi aplikasi yang sudah diuji |
 | [scripts/check_models.py](scripts/check_models.py) | Pemeriksaan konsistensi artefak dan label historis |
@@ -136,3 +138,15 @@ Notebook memerlukan lingkungan analisis terpisah dengan paket tambahan untuk
 plotting dan notebook; `requirements.txt` saat ini ditujukan untuk aplikasi.
 Mengulang notebook dapat menulis ulang artefak dan `requirements.txt`, jadi
 gunakan salinan kerja saat bereksperimen.
+
+## Memeriksa unggahan CSV
+
+Jalankan pengujian validasi dan alur aplikasi dari root repository setelah
+dependensi aplikasi terpasang:
+
+```sh
+python -m unittest discover -s tests -v
+```
+
+Pengujian memakai CSV sintetis serta artefak model yang tersedia; tidak meminta
+data USGS atau melatih ulang model.
