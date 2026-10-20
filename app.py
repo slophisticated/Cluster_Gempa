@@ -4,9 +4,10 @@ import joblib
 import pandas as pd
 import streamlit as st
 
+from csv_input import FEATURES, FEATURE_LIMITS, read_prediction_csv
+
 st.set_page_config(page_title="Clustering Gempa Indonesia", page_icon="🌋", layout="wide")
 
-FEATURES = ["latitude", "longitude", "depth", "mag"]
 # Warna tiap cluster (hex) untuk peta
 COLORS = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
           "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
@@ -57,13 +58,17 @@ with tab1:
 
     with col_input:
         st.subheader("Data Gempa")
-        lat = st.number_input("Latitude (−11 s.d. 6)", min_value=-11.0, max_value=6.0,
+        lat = st.number_input("Latitude (−11 s.d. 6)",
+                              min_value=FEATURE_LIMITS["latitude"][0], max_value=FEATURE_LIMITS["latitude"][1],
                               value=-3.5, step=0.1, format="%.4f")
-        lon = st.number_input("Longitude (95 s.d. 141)", min_value=95.0, max_value=141.0,
+        lon = st.number_input("Longitude (95 s.d. 141)",
+                              min_value=FEATURE_LIMITS["longitude"][0], max_value=FEATURE_LIMITS["longitude"][1],
                               value=100.5, step=0.1, format="%.4f")
-        depth = st.number_input("Kedalaman (km)", min_value=0.0, max_value=700.0,
+        depth = st.number_input("Kedalaman (km)",
+                                min_value=FEATURE_LIMITS["depth"][0], max_value=FEATURE_LIMITS["depth"][1],
                                 value=25.0, step=1.0)
-        mag = st.number_input("Magnitudo", min_value=4.5, max_value=9.5,
+        mag = st.number_input("Magnitudo",
+                              min_value=FEATURE_LIMITS["mag"][0], max_value=FEATURE_LIMITS["mag"][1],
                               value=5.0, step=0.1)
         tombol = st.button("Prediksi Cluster", type="primary")
 
@@ -98,16 +103,19 @@ with tab1:
 with tab2:
     st.write("Upload file CSV yang memiliki kolom `latitude`, `longitude`, `depth`, dan `mag` "
              "(misalnya hasil download dari USGS).")
+    st.write("Batas input: latitude −11–6, longitude 95–141, depth 0–700 km, dan mag 4,5–9,5. "
+             "Gunakan titik untuk desimal di CSV.")
     file = st.file_uploader("Pilih file CSV", type="csv")
 
     if file is not None:
-        df_upload = pd.read_csv(file)
-        kurang = [c for c in FEATURES if c not in df_upload.columns]
-
-        if kurang:
-            st.error(f"Kolom berikut tidak ditemukan: {', '.join(kurang)}")
+        try:
+            df_upload, dilewati = read_prediction_csv(file)
+        except ValueError as error:
+            st.error(str(error))
         else:
-            df_upload = df_upload.dropna(subset=FEATURES).copy()
+            if dilewati:
+                st.warning(f"{dilewati} baris dilewati karena ada fitur kosong. "
+                           "Hasil berikut hanya mencakup baris yang lengkap.")
             df_upload["Cluster"] = prediksi_cluster(df_upload)
             df_upload["Nama Cluster"] = df_upload["Cluster"].map(lambda c: cluster_info[int(c)]["nama"])
 
